@@ -46,6 +46,11 @@ async function enable(context) {
     service: serviceName,
     providerPlugin,
   };
+
+  context.print.info('');
+  context.print.success('You can now publish your app using the following command:');
+  context.print.info('Command: amplify publish');
+  context.print.info('');
   return context.amplify.updateamplifyMetaAfterResourceAdd(
     constants.CategoryName,
     serviceName,

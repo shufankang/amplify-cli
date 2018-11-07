@@ -1,16 +1,10 @@
-const fs = require('fs-extra');
 const path = require('path');
 const constants = require('./constants');
 const supportedServices = require('./supported-services');
 
-function getAvailableServices(context) {
+function getAvailableServices() {
   const availableServices = [];
-  const projectConfig = context.amplify.getProjectConfig();
-  Object.keys(supportedServices).forEach((service) => {
-    if (Object.keys(projectConfig.providers).includes(supportedServices[service].provider)) {
-      availableServices.push(service);
-    }
-  });
+  Object.keys(supportedServices).forEach(service => availableServices.push(service));
   return availableServices;
 }
 
@@ -20,19 +14,9 @@ function getCategoryStatus(context) {
 
   const availableServices = getAvailableServices(context);
   if (availableServices.length > 0) {
-    const projectBackendDirPath = context.amplify.pathManager.getBackendDirPath();
-    const categoryDirPath = path.join(projectBackendDirPath, constants.CategoryName);
-    if (fs.existsSync(categoryDirPath)) {
-      const serviceDirnames = fs.readdirSync(categoryDirPath);
-      for (let i = 0; i < serviceDirnames.length; i++) {
-        const serviceDirPath = path.join(categoryDirPath, serviceDirnames[i]);
-        const stat = fs.lstatSync(serviceDirPath);
-        if (stat.isDirectory()) {
-          if (availableServices.includes(serviceDirnames[i])) {
-            enabledServices.push(serviceDirnames[i]);
-          }
-        }
-      }
+    const { hosting } = context.amplify.getProjectMeta();
+    if (hosting) {
+      Object.keys(hosting).forEach(key => enabledServices.push(key));
     }
     availableServices.forEach((service) => {
       if (!enabledServices.includes(service)) {

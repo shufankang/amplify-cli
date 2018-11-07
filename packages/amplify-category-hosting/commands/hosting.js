@@ -19,8 +19,12 @@ module.exports = {
         description: `Takes you through a CLI flow to add a ${featureName} resource to your local backend`,
       },
       {
-        name: 'update',
+        name: 'configure',
         description: `Takes you through a CLI flow to update a ${featureName} resource`,
+      },
+      {
+        name: 'console',
+        description: `Opens the AWS console for ${featureName} resource`,
       },
       {
         name: 'push',
